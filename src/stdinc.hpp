@@ -30,7 +30,6 @@ using namespace std::literals;
 #include "game/chaiscript/chaiscript.hpp"
 
 #include "component/command.hpp"
-#include "component/chat.hpp"
 #include "component/userinfo.hpp"
 
 #define SELECT_VALUE(t6mp, t6zm, iw5mp) (game::is_t6mp() ? (t6mp) : game::is_t6zm() ? (t6zm) : (iw5mp))

@@ -8,7 +8,7 @@ namespace game
 	extern bool is_t6zm();
 	extern bool is_iw5();
 
-	extern int get_maxclients();
+	extern int get_dvar_int(const char*);
 
 	typedef void (*Cmd_AddCommandInternal_t)(const char*, void(), cmd_function_t*);
 	extern Cmd_AddCommandInternal_t Cmd_AddCommandInternal;
@@ -75,11 +75,8 @@ namespace game
 	typedef void (*SV_Cmd_ArgvBuffer_t)(int, char*, int);
 	extern SV_Cmd_ArgvBuffer_t SV_Cmd_ArgvBuffer;
 
-	typedef int (*SV_GetGuid_t)(int clientNum);
+	typedef const char* (*SV_GetGuid_t)(int clientNum);
 	extern SV_GetGuid_t SV_GetGuid;
-
-	typedef const char* (*SEH_StringEd_GetString_t)(const char*);
-	extern SEH_StringEd_GetString_t SEH_StringEd_GetString;
 
 	typedef void (*SV_GetUserInfo_t)(int, char*, int);
 	extern SV_GetUserInfo_t SV_GetUserInfo;

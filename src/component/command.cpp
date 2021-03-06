@@ -3,9 +3,6 @@
 namespace command
 {
 	std::unordered_map<std::string, std::function<void(params&)>> handlers;
-	std::unordered_map<std::string, std::function<void(int, params_sv&, std::function<void()>)>> handlers_sv;
-
-	utils::hook::detour clientcommand_hook;
 
 	void main_handler()
 	{
@@ -42,33 +39,6 @@ namespace command
 		return result;
 	}
 
-	int params_sv::size()
-	{
-		return game::is_iw5() 
-			? game::iw5::SV_Cmd_Argc() 
-			: game::t6::SV_Cmd_Argc();
-	}
-
-	const char* params_sv::get(int index)
-	{
-		return game::is_iw5() 
-			? game::iw5::SV_Cmd_Argv(index) 
-			: game::t6::SV_Cmd_Argv(index);
-	}
-
-	std::string params_sv::join(int index)
-	{
-		std::string result = {};
-
-		for (int i = index; i < this->size(); i++)
-		{
-			if (i > index) result.append(" ");
-			result.append(this->get(i));
-		}
-
-		return result;
-	}
-
 	void add_raw(const char* name, void (*callback)())
 	{
 		game::Cmd_AddCommandInternal(name, callback, utils::memory::get_allocator()->allocate<game::cmd_function_t>());
@@ -86,35 +56,99 @@ namespace command
 		handlers[command] = callback;
 	}
 
-	void add_sv(const char* name, std::function<void(int, params_sv&, std::function<void()>)> callback)
-	{
-		const auto command = utils::string::to_lower(name);
+    void init()
+    {
+        command::add("tellraw", [](command::params& params)
+        {
+            if (params.size() < 3)
+            {
+                return;
+            }
 
-		handlers_sv[command] = callback;
-	}
+            const auto client = atoi(params.get(1));
+            const auto message = params.join(2);
 
-	namespace
-	{
-		void clientcommand_stub(int clientNum)
-		{
-			params_sv params;
+            game::SV_GameSendServerCommand(client, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(106, 106, 84), message.data()));
 
-			const auto command = utils::string::to_lower(params[0]);
+            printf("tell %i -> %s\n", client, message.data());
+        });
 
-			if (handlers_sv.find(command) != handlers_sv.end())
-			{
-				return handlers_sv[command](clientNum, params, [clientNum]()
-				{
-					clientcommand_hook.invoke<void>(clientNum);
-				});
-			}
+        command::add("sayraw", [](command::params& params)
+        {
+            if (params.size() < 2)
+            {
+                return;
+            }
 
-			return clientcommand_hook.invoke<void>(clientNum);
-		}
-	}
+            const auto message = params.join(1);
 
-	void init()
-	{
-		clientcommand_hook.create(game::ClientCommand, clientcommand_stub);
-	}
+            game::SV_GameSendServerCommand(-1, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(106, 106, 84), message.data()));
+
+            printf("say -> %s\n", message.data());
+        });
+
+        command::add("clientprint", [](command::params& params)
+        {
+            if (params.size() < 3)
+            {
+                return;
+            }
+
+            const auto client = atoi(params.get(1));
+            const auto message = params.join(2);
+
+            game::SV_GameSendServerCommand(client, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(59, 59, 102), message.data()));
+
+            printf("print %i -> %s\n", client, message.data());
+        });
+
+        command::add("allclientsprint", [](command::params& params)
+        {
+            if (params.size() < 2)
+            {
+                return;
+            }
+
+            const auto message = params.join(1);
+
+            game::SV_GameSendServerCommand(-1, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(59, 59, 102), message.data()));
+
+            printf("print -> %s\n", message.data());
+        });
+
+        command::add("clientprintbold", [](command::params& params)
+        {
+            if (params.size() < 3)
+            {
+                return;
+            }
+
+            const auto client = atoi(params.get(1));
+            const auto message = params.join(2);
+
+            game::SV_GameSendServerCommand(client, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(60, 60, 99), message.data()));
+
+            printf("printbold %i -> %s\n", client, message.data());
+        });
+
+        command::add("allclientsprintbold", [](command::params& params)
+        {
+            if (params.size() < 2)
+            {
+                return;
+            }
+
+            const auto message = params.join(1);
+
+            game::SV_GameSendServerCommand(-1, 0, utils::string::va("%c \"%s\"",
+                SELECT_VALUE(60, 60, 99), message.data()));
+
+            printf("printbold -> %s\n", message.data());
+        });
+    }
 }
