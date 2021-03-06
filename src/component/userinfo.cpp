@@ -78,78 +78,78 @@ namespace userinfo
 			utils::hook::call(0x4FAEF8, using_tag_hook);
 		}
 
-        command::add("setclantag", [](command::params& params)
-        {
+		command::add("setclantag", [](command::params& params)
+		{
 			if (params.size() < 3)
 			{
 				printf("Usage: setclantag <num> <clantag>\n");
 				return;
 			}
 
-            const auto client = params.get(1);
-            const auto clantag = params.get(2);
+			const auto client = params.get(1);
+			const auto clantag = params.get(2);
 
-            const auto clientNum = atoi(client);
-            const auto sv_maxclients = game::get_dvar_int("sv_maxclients");
+			const auto clientNum = atoi(client);
+			const auto sv_maxclients = game::get_dvar_int("sv_maxclients");
 
-            if (clientNum >= sv_maxclients)
-            {
-                return;
-            }
+			if (clientNum >= sv_maxclients)
+			{
+				return;
+			}
 
-            char clean_tag[8] = { 0 };
-            strncpy_s(clean_tag, clantag, 7);
-            game::I_CleanStr(clean_tag);
+			char clean_tag[8] = { 0 };
+			strncpy_s(clean_tag, clantag, 7);
+			game::I_CleanStr(clean_tag);
 
 			clantags[clientNum] = clean_tag;
 			game::ClientUserInfoChanged(clientNum);
-        });
+		});
 
-        command::add("setclantagraw", [](command::params& params)
-        {
+		command::add("setclantagraw", [](command::params& params)
+		{
 			if (params.size() < 3)
 			{
 				printf("Usage: setclantagraw <num> <clantag>\n");
 				return;
 			}
 
-            const auto client = params.get(1);
-            auto clantag = params.get(2);
+			const auto client = params.get(1);
+			auto clantag = params.get(2);
 
-            const auto clientNum = atoi(client);
-            auto sv_maxclients = game::get_dvar_int("sv_maxclients");
+			const auto clientNum = atoi(client);
+			auto sv_maxclients = game::get_dvar_int("sv_maxclients");
 
-            if (clientNum >= sv_maxclients)
-            {
-                return;
-            }
+			if (clientNum >= sv_maxclients)
+			{
+				return;
+			}
 
 			clantags[clientNum] = clantag;
 			game::ClientUserInfoChanged(clientNum);
-        });
+		});
 
-        command::add("rename", [](command::params& params)
-        {
+		command::add("rename", [](command::params& params)
+		{
 			if (params.size() < 3)
 			{
 				printf("Usage: rename <num> <name>\n");
 				return;
 			}
 
-            const auto client = params.get(1);
-            const auto name = params.get(2);
+			const auto client = params.get(1);
+			const auto name = params.get(2);
 
-            const auto clientNum = atoi(client);
-            const auto sv_maxclients = game::get_dvar_int("sv_maxclients");
+			const auto clientNum = atoi(client);
+			const auto sv_maxclients = game::get_dvar_int("sv_maxclients");
 
-            if (clientNum >= sv_maxclients)
-            {
-                return;
-            }
+			if (clientNum >= sv_maxclients)
+			{
+				return;
+			}
 
-            names[clientNum] = name;
-            game::ClientUserInfoChanged(clientNum);
-        });
+			names[clientNum] = name;
+			game::ClientUserInfoChanged(clientNum);
+		});
 
 		command::add("resetname", [](command::params& params)
 		{
