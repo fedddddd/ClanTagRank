@@ -30,7 +30,7 @@ end
 
 dependencies.load()
 
-workspace "ClanTagRank"
+workspace "clantags"
 	location "./build"
 	objdir "%{wks.location}/obj/%{cfg.buildcfg}"
 	targetdir "%{wks.location}/bin/%{cfg.buildcfg}"
@@ -63,9 +63,9 @@ workspace "ClanTagRank"
 		defines { "DEBUG", "_DEBUG" }
 	configuration {}
 
-	startproject "ClanTagRank"
+	startproject "clantags"
 
-    project "ClanTagRank"
+    project "clantags"
         kind "SharedLib"
         language "C++"
 

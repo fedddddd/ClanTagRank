@@ -17,8 +17,6 @@
 #include <functional>
 #include <regex>
 
-#include <MinHook.h>
-
 using namespace std::literals;
 
 #include "utils/memory.hpp"
@@ -27,7 +25,6 @@ using namespace std::literals;
 
 #include "game/structs.hpp"
 #include "game/game.hpp"
-#include "game/chaiscript/chaiscript.hpp"
 
 #include "component/command.hpp"
 #include "component/userinfo.hpp"

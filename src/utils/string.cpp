@@ -1,6 +1,6 @@
 // iw6x-client
 
-#include "stdinc.hpp"
+#include <stdinc.hpp>
 
 namespace utils::string
 {

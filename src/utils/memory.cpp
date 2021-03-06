@@ -1,6 +1,6 @@
 // https://github.com/momo5502/open-iw5
 
-#include "stdinc.hpp"
+#include <stdinc.hpp>
 
 namespace utils
 {
